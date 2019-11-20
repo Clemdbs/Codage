@@ -21,3 +21,13 @@ int matriceInverse(int mat[longueur][largeur]){
         }
     }
 }
+
+void affich_hadamard(int mat**){
+    int i, j;
+    for(i = 0; i < longueur; i++){
+        for(j = 0; j < largeur; j++){
+            printf("| ");
+            printf("%d ", mat[i][j]);
+        }
+    }
+}

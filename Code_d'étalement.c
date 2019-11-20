@@ -9,7 +9,7 @@
 #include <math.h>
 #include "matrice.h"
 
-//renvoyer une matrice et pas un int, faire une structure
+//Penser à free la matrice en entier /!\
 int **hadamard(int longueur){
     int largeur = longueur;
     int **H = malloc(sizeof(longueur));//Matrice d'hadamard
@@ -17,6 +17,8 @@ int **hadamard(int longueur){
     int i, j;
     int **tempH = malloc(sizeof(longueur));//Matrice de save de celle d'hadamard au cas où
     tempH = H;
+
+
     //malloc chaque case dans les for
     for(i = 0; i < longueur/2; i++){
         for(j = 0; j < longueur/2; j++){
@@ -28,7 +30,7 @@ int **hadamard(int longueur){
     for(i = longueur/2; i < longueur; i++){
         for(j = longueur/2; j < longueur; j++){
             H[i][j] = malloc(sizeof(int));
-            H[i][j] = 1;
+            H[i][j] = -1;
         }   
     }
 
@@ -48,4 +50,5 @@ int **hadamard(int longueur){
 int main(int argc, const char* argv[]){
     int longueur = atoi(argv[1]);
     int mat[longueur][longueur] = hadamard(longueur);
+    affich_hadamard(mat[longueur][longueur]);
 }
