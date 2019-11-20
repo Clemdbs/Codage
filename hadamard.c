@@ -9,32 +9,43 @@
 #include <math.h>
 #include "matrice.h"
 
-//Penser à free la matrice en entier /!\
-int **hadamard(int longueur){
-    int largeur = longueur;
+void initMatrice(int **mat){
+    int i, j;
+    for(i = 0; i < )
+}
+
+/*   /!\ Penser à free la matrice en entier /!\   */
+int **hadamard(int nbUser){
+    int largeur = nbUser, longueur = nbUser;
     int **H = malloc(sizeof(longueur));//Matrice d'hadamard
     H[0][0] = 1;
-    int i, j;
-    int **tempH = malloc(sizeof(longueur));//Matrice de save de celle d'hadamard au cas où
-    tempH = H;
+    int i, j, k;
+    int nbBoucle = 0;
+    int truc = longueur;
 
-
-    //malloc chaque case dans les for
-    for(i = 0; i < longueur/2; i++){
-        for(j = 0; j < longueur/2; j++){
-            H[i][j] = malloc(sizeof(int));
-            H[i][j] = 1;
-        }   
+    while(truc != 1){
+        truc /= 2;
+        nbBoucle++;
     }
-    //Histoire du renversement de la matrice préenregistré
-    for(i = longueur/2; i < longueur; i++){
-        for(j = longueur/2; j < longueur; j++){
-            H[i][j] = malloc(sizeof(int));
-            H[i][j] = -1;
-        }   
+   
+   
+    for (k = 0; k < nbBoucle; k++){
+        //malloc chaque case dans les for
+        for(i = 0; i < longueur/2; i++){
+            for(j = 0; j < longueur/2; j++){
+                H[i][j] = malloc(sizeof(int));
+                H[i][j] = 1;
+            }   
+        }
+        //Histoire du renversement de la matrice préenregistré
+        for(i = longueur/2; i < longueur; i++){
+            for(j = longueur/2; j < longueur; j++){
+                H[i][j] = malloc(sizeof(int));
+                H[i][j] = -1;
+            }   
+        }
     }
-
-    return **H;
+    return H;
 }
 
 
@@ -91,5 +102,5 @@ int main(int argc, const char* argv[]){
     
     int longueur = atoi(argv[1]);
     int mat[longueur][longueur] = hadamard(longueur);
-    affich_hadamard(mat[longueur][longueur]);
+    affich_hadamard(mat[longueur][longueur], longueur);
 }

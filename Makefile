@@ -12,7 +12,7 @@ top_dir = .
 # Object files
 #
 
-fich_obj_coureur = coureur.o messages.o
+main = hadamard.o matrice.o
 
 #
 # Options for compilation
@@ -33,11 +33,11 @@ opt = -g -Wall -D_DEBUG_
 #-------- Mains ---------------
 #
 
-coureur : $(fich_obj_coureur)
-	$(GCCLNK) $(fich_obj_coureur) $(opt) -o coureur -I ./
+coureur : $(main)
+	$(GCCLNK) $(main) $(opt) -o main -I ./
 
-coureur.o : coureur.c 
-	$(GCCOBJ) $(opt) coureur.c -o coureur.o -I ./
+hadamard.o : hadamard.c 
+	$(GCCOBJ) $(opt) hadamard.c -o hadamard.o -I ./
 
 #
 # --- Tests ---
@@ -48,8 +48,8 @@ coureur.o : coureur.c
 #
 
 
-messages.o : messages.c messages.h 
-	$(GCCOBJ) $(opt) messages.c -o messages.o -I ./
+matrice.o : matrice.c matrice.h 
+	$(GCCOBJ) $(opt) matrice.c -o matrice.o -I ./
 
 #
 #-------- Headers -------------
