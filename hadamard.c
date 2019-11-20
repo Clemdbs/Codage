@@ -49,20 +49,35 @@ int **hadamard(int nbUser){
 }
 
 
-
-
-
-
-
-//messageCode => le message codé
-//messageClair => matrice pour le message une fois qu'il sera decodé
-//ligne => ligne de la matrice d'hadamard
+//messageACoder => le message que l'on va codé (tableau)
+//messageCoder => le message une fois codé (tableau)
 //matriceH => la matrice d'hadamard qui a été utilisé pour le codage du message
+//ligne => ligne de la matrice d'hadamard
 //tailleMessage => taille du message codé
 //longueur => taille d'une ligne de la matrice d'hadamard utilisé
-void decodeH(int *messageCode, int *messageClair, int matriceH, int ligne, int tailleMessage, int longueur){
+void coderH(int *messageACoder, int *messageCoder, int **matriceH, int ligne, int tailleMessage, int longueur, int tailleClair){
+
+    int i, k = 0; 
+    int tailleChiffreCode = tailleMessage / tailleClair;
+
+    for(i = 0; i < tailleClair; i++){
+        for(j = 0; j < tailleChiffreCode; j++, k++){
+            messageCoder[k] = messageACoder[i] * matriceH[ligne][j]; 
+        }
+    }
+}
+
+
+
+//messageCode => le message codé (tableau)
+//messageClair => le message une fois qu'il sera decodé (tableau)
+//matriceH => la matrice d'hadamard qui a été utilisé pour le codage du message
+//ligne => ligne de la matrice d'hadamard
+//tailleMessage => taille du message codé
+//longueur => taille d'une ligne de la matrice d'hadamard utilisé
+void decoderH(int *messageCode, int *messageClair, int **matriceH, int ligne, int tailleMessage, int longueur, int tailleClair){
+
     int i, j, k = 0;
-    int tailleClair = tailleMessage / longueur;
     int tailleChiffreCode = tailleMessage / tailleClair;
     int decodage[tailleMessage];
     
@@ -95,10 +110,16 @@ void decodeH(int *messageCode, int *messageClair, int matriceH, int ligne, int t
 
 int main(int argc, const char* argv[]){
 
+    //codage du message
+    int messageACoder[tailleClair];
+    int tailleMessage =  tailleClair * longueur;
+    int messageCoder[tailleMessage];
+    coderH(messageACoder, messageCoder, matriceH, ligne, tailleMessage, longueur, tailleClair);
+
     //decodage du message
     int tailleClair = tailleMessage / longueur;//taille du message a coder
     int messageClair[tailleClair];
-    decodeH(messageCode, messageClair, matriceH, ligne, tailleMessage, longueur);
+    decoderH(messageCode, messageClair, matriceH, ligne, tailleMessage, longueur, tailleClair);
     
     int longueur = atoi(argv[1]);
     int mat[longueur][longueur] = hadamard(longueur);
