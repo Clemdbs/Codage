@@ -7,11 +7,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "matrice.h"
 
-void hadamard(int longueur){
-    int H[][]; //Matrice de hadamard
+//renvoyer une matrice et pas un int, faire une structure
+int **hadamard(int longueur){
+    int largeur = longueur;
+    int **H = malloc(sizeof(longueur));//Matrice d'hadamard
+    H[0][0] = 1;
     int i, j;
-    int tempH[][]; //Matrice de save de celle d'hadamard
+    int **tempH = malloc(sizeof(longueur));//Matrice de save de celle d'hadamard au cas où
+    tempH = H;
+    //malloc chaque case dans les for
+    for(i = 0; i < longueur/2; i++){
+        for(j = 0; j < longueur/2; j++){
+            H[i][j] = malloc(sizeof(int));
+            H[i][j] = 1;
+        }   
+    }
+    //Histoire du renversement de la matrice préenregistré
+    for(i = longueur/2; i < longueur; i++){
+        for(j = longueur/2; j < longueur; j++){
+            H[i][j] = malloc(sizeof(int));
+            H[i][j] = 1;
+        }   
+    }
+
+    return **H;
 }
 
 
@@ -66,4 +87,6 @@ int main(int argc, const char* argv[]){
     int messageClair[tailleClair];
     decodeH(messageCode, messageClair, matriceH, ligne, tailleMessage, longueur);
     
+    int longueur = atoi(argv[1]);
+    int mat[longueur][longueur] = hadamard(longueur);
 }
