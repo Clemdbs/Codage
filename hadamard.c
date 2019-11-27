@@ -9,42 +9,91 @@
 #include <math.h>
 #include "matrice.h"
 
-void initMatrice(int **mat){
-    int i, j;
-    for(i = 0; i < )
+int findSize(int nbUser){
+    int i, taille = 0;
+    for(i = 1; i < nbUser; i++)
+        taille = pow(2,i);
+    return taille;
 }
+
+void initMatrice(int taille, int **mat){
+    mat = malloc(sizeof(taille));
+    int i, j;
+    
+    //Réservation mémoire à faire 
+   
+    //malloc chaque case dans les for
+    for(i = 0; i < taille; i++){
+            mat[i] = malloc(sizeof(int) * taille);
+    }
+    
+    //Mise à 0 de la matrice (optionnel)
+    for(i = 0; i < taille; i++){
+        for(i = 0; i < taille; i++){
+            mat[i][j] = 0;
+        }
+    }
+}
+
+int **inverserMatrice(int **mat, int taille){
+    int i, j;
+    for(i = 0; i < taille; i++){
+        for(j = 0; j < taille; j++){
+            mat[i][j] *= -1;
+        }   
+    }
+    return mat;
+}
+
 
 /*   /!\ Penser à free la matrice en entier /!\   */
 int **hadamard(int nbUser){
-    int largeur = nbUser, longueur = nbUser;
-    int **H = malloc(sizeof(longueur));//Matrice d'hadamard
-    H[0][0] = 1;
-    int i, j, k;
-    int nbBoucle = 0;
-    int truc = longueur;
+    int taille;
+    int **H;
+    initMatrice(nbUser, H);//Matrice d'hadamard
+    if(nbUser == 1){
+        H[0][0] = 1;
+        H[0][1] = 1;
+        H[1][0] = 1;
+        H[1][1] = -1;
+        return H;
+    }
+    taille = findSize(nbUser-1);
+    int **Hprec ;
+    initMatrice(taille, Hprec);
+    Hprec = hadamard(nbUser-1);
 
-    while(truc != 1){
-        truc /= 2;
-        nbBoucle++;
-    }
-   
-   
-    for (k = 0; k < nbBoucle; k++){
-        //malloc chaque case dans les for
-        for(i = 0; i < longueur/2; i++){
-            for(j = 0; j < longueur/2; j++){
-                H[i][j] = malloc(sizeof(int));
-                H[i][j] = 1;
-            }   
-        }
-        //Histoire du renversement de la matrice préenregistré
-        for(i = longueur/2; i < longueur; i++){
-            for(j = longueur/2; j < longueur; j++){
-                H[i][j] = malloc(sizeof(int));
-                H[i][j] = -1;
-            }   
+
+    int i, j;
+
+    //Recopie en haut à gauche
+    for(i = 0; i < taille/2; i++){
+        for(j = 0; j < taille/2; j++){
+            H[i][j] = Hprec[i][j];
         }
     }
+
+    ////Recopie en haut à droite
+    for(i = taille/2; i < taille; i++){
+        for(j = 0; j < taille/2; j++){
+            H[i][j] = Hprec[i][j];
+        }
+    }
+
+    ////Recopie en bas à gauche
+    for(i = 0; i < taille; i++){
+        for(j = taille/2; j < taille; j++){
+            H[i][j] = Hprec[i][j];
+        }
+    }
+   
+    ////Recopie en bas à droite
+    for(i = 0; i < taille; i++){
+        for(j = taille/2; j < taille; j++){
+            H[i][j] = inverserMatrice(Hprec, taille);
+        }
+    }
+
     return H;
 }
 
