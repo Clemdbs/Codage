@@ -32,7 +32,6 @@ int **initMatrice(int taille){
     //malloc chaque case dans les for
     for(i = 0; i < taille; i++){
             mat[i] = malloc(sizeof(int) * taille);
-            printf(" pt : %p\n", mat[i]);
     }
     
     //Mise à 0 de la matrice (optionnel)
@@ -51,64 +50,58 @@ void inverserMatrice(int **mat, int taille){
             mat[i][j] *= -1;
 }
 
-
 /*   /!\ Penser à free la matrice en entier /!\   */
 int **hadamard(int nbUser){
     int **H = initMatrice(nbUser);//Matrice d'hadamard
-    // printf(" 2pt : %p\n", H[0]);
-    // printf(" 2pt : %p\n", H[1]);
+
     if(nbUser == 1){
         H[0][0] = 1;
-        // H[0][1] = 1;
-        // H[1][0] = 1;
-        // H[1][1] = -1;
         return H;
     }
-    //int taille;//nombre de matrice qu'il va falloir faire avant d'arriver a celle pour coder
-    // taille = findSize(nbUser-1);
-    int **Hprec = initMatrice(nbUser-1);
-    Hprec = hadamard(nbUser-1);
+    int **Hprec = initMatrice(nbUser/2);
+    Hprec = hadamard(nbUser/2);
 
-
-    int i, j;
+    int i, j, x, y;
+    printf("avant recopie \n");
 
     //Recopie en haut à gauche
-    for(i = 0; i < nbUser/2; i++){
-        for(j = 0; j < nbUser/2; j++){
-            H[i][j] = Hprec[i][j];
+    for(i = 0, x = 0; i < nbUser/2; i++, x++){
+        for(j = 0, y = 0; j < nbUser/2; j++, y++){
+            H[i][j] = Hprec[x][y];
         }
     }
 
     //Recopie en haut à droite
-    for(i = nbUser/2; i < nbUser; i++){
-        for(j = 0; j < nbUser/2; j++){
-            H[i][j] = Hprec[i][j];
+    for(i = nbUser/2, x = 0; i < nbUser; i++, x++){
+        for(j = 0, y = 0; j < nbUser/2; j++, y++){
+            H[i][j] = Hprec[x][y];
         }
     }
 
     //Recopie en bas à gauche
-    for(i = 0; i < nbUser/2; i++){
-        for(j = nbUser/2; j < nbUser; j++){
-            H[i][j] = Hprec[i][j];
+    for(i = 0, x = 0; i < nbUser/2; i++, x++){
+        for(j = nbUser/2, y = 0; j < nbUser; j++, y++){
+            H[i][j] = Hprec[x][y];
         }
     }
    
     //Recopie en bas à droite
-    for(i = nbUser/2; i < nbUser; i++){
-        for(j = nbUser/2; j < nbUser; j++){
-            inverserMatrice(Hprec, nbUser);
-            H[i][j] = Hprec[i][j];
+    for(i = nbUser/2, x = 0; i < nbUser; i++, x++){
+        for(j = nbUser/2, y = 0; j < nbUser; j++, y++){
+            H[i][j] = -(Hprec[x][y]);
         }
     }
+    printf("matrice H\n");
+    affich_hadamard(H, nbUser);
 
     return H;
 }
 
 int main() {
 
-    int longueur = 2;
+    int longueur = 4;
     int **mat = hadamard(longueur);
-    affich_hadamard(mat, longueur);
+    //affich_hadamard(mat, longueur);
 
     //codage du message
     // int tailleClair = atoi(argv[2]);
