@@ -9,5 +9,6 @@ void affich_hadamard(int **mat, int longueur){
             printf("| ");
             printf("%d ", mat[i][j]);
         }
+        printf("\n");
     }
 }

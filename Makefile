@@ -33,11 +33,11 @@ opt = -g -Wall -D_DEBUG_
 #-------- Mains ---------------
 #
 
-coureur : $(main)
+hadamard : $(main)
 	$(GCCLNK) $(main) $(opt) -o main -I ./
 
 hadamard.o : hadamard.c 
-	$(GCCOBJ) $(opt) hadamard.c -o hadamard.o -I ./
+	$(GCCOBJ) $(opt) -g hadamard.c -o hadamard.o -I ./
 
 #
 # --- Tests ---
@@ -66,7 +66,7 @@ clean :
 #-------- All executables -------
 #
 
-all :   coureur 
+all :   hadamard 
 
 #
 #-------- All tests -------

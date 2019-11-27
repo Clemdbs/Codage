@@ -1,1 +1,1 @@
-void affich_hadamard(int **mat);
+void affich_hadamard(int **mat, int longueur);

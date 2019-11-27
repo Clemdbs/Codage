@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "matrice.h"
+#include "encodage.h"
 
 
 //messageACoder => le message que l'on va codé (tableau)
