@@ -12,14 +12,14 @@ top_dir = .
 # Object files
 #
 
-main = hadamard.o matrice.o
+main = hadamard.o matrice.o encodage.o
 
 #
 # Options for compilation
 #
 
-GCCOBJ = gcc -c 
-GCCLNK = gcc 
+GCCOBJ = gcc -c
+GCCLNK = gcc
 
 
 # Option for debugger
@@ -36,9 +36,11 @@ opt = -g -Wall -D_DEBUG_
 hadamard : $(main)
 	$(GCCLNK) $(main) $(opt) -o main -I ./
 
-hadamard.o : hadamard.c 
+hadamard.o : hadamard.c
 	$(GCCOBJ) $(opt) -g hadamard.c -o hadamard.o -I ./
 
+encodage.o : encodage.c
+	$(GCCOBJ) $(opt) -g encodage.c -o encodage.o -I ./
 #
 # --- Tests ---
 #
@@ -48,7 +50,7 @@ hadamard.o : hadamard.c
 #
 
 
-matrice.o : matrice.c matrice.h 
+matrice.o : matrice.c matrice.h
 	$(GCCOBJ) $(opt) matrice.c -o matrice.o -I ./
 
 #
@@ -59,14 +61,14 @@ matrice.o : matrice.c matrice.h
 #-------- Clean objects -------
 #
 
-clean : 
-	rm -f *.o 
+clean :
+	rm -f *.o
 
 #
 #-------- All executables -------
 #
 
-all :   hadamard 
+all :   hadamard
 
 #
 #-------- All tests -------
@@ -77,4 +79,4 @@ all :   hadamard
 #
 
 tags :
-	etags *.c 
+	etags *.c

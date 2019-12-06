@@ -6,48 +6,84 @@
 //Recopier les matrices d'avant pour éviter les répétitions de calculs
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "matrice.h"
 #include "encodage.h"
 
-// int puissance(int nb, int puiss){
-//     int i, res;
-//     for(i = 0; i < puiss; i++)
-//         res = nb * nb;
-//     return res;
-// }
+#define TAILLE_SEQ 3
 
-// int findSize(int nbUser){
-//     int i, taille = 0;
-//     for(i = 1; i < nbUser; i++)
-//         taille = puissance(2,nbUser);
-//     return taille;
-// }
+//SEGfault sur la 4eme boucle
 
-int **initMatrice(int taille){
-    int **mat = malloc(sizeof(int *) * taille);
-    int i, j;
-    
-    //Réservation mémoire à faire 
-   
-    //malloc chaque case dans les for
-    for(i = 0; i < taille; i++){
-            mat[i] = malloc(sizeof(int) * taille);
+typedef struct etalement_s{
+  int* sequence3Bits;//Tableau qui stocke la séquence aléatoire des bits pour le calcul de la séquence
+  int* ligneHadamard;//Tableau qui stocke la ligne qui correspond à l'utilisateur
+  int* sequence;//Tableau qui stocke la séquence après les calculs
+}etalement_t;
+
+/*Retourne un tableau de binaire*/
+void etalement(int longueur, int **matrice){
+
+  srand (time (NULL));
+
+  etalement_t hadamarddd;
+
+  int sequence3Bits[TAILLE_SEQ];
+  int sequenceFinale[longueur * TAILLE_SEQ];
+
+  int i,j,k,l,m,n;
+
+  hadamarddd.sequence3Bits = malloc(sizeof(int));
+  hadamarddd.ligneHadamard = malloc(sizeof(int));
+  hadamarddd.sequence = malloc(sizeof(int));
+
+  //initialisation du tableau qui va stocker le résultat final
+  for(i = 0; i < longueur * TAILLE_SEQ; i++)
+    sequenceFinale[i] = 0;
+
+  for(i = 1; i <= longueur; i++){
+    printf("Ligne de la matrice pour l'utilisateur %d : ",i);
+    for(j = 0; j < longueur; j++){
+      printf("%d", matrice[i][j]);
+      hadamarddd.ligneHadamard[j] = matrice[i][j];//Erreur ici
     }
-    
-    //Mise à 0 de la matrice (optionnel)
-    for(i = 0; i < taille; i++){
-        for(j = 0; j < taille; j++){
-            mat[i][j] = 0;
+
+    printf("Séquence de 3 bits aléatoires : ");
+
+    for(k = 0; k < TAILLE_SEQ; k++){
+      sequence3Bits[k] = rand() & 1;
+      printf("%d", sequence3Bits[k]);
+      hadamarddd.sequence3Bits[k] = sequence3Bits[k];
+      // fprintf(stderr, "ici, j : %d, tableau struct sequence3bits : %d\n", j, hadamarddd.sequence3Bits[k]);
+    }
+
+    //Pour chaque bit de la séquence 3 bits faire
+    for(l = 0; l < TAILLE_SEQ; l++){
+      //Si le bit vaut 0
+      if(hadamarddd.sequence3Bits[l] == 0){
+        //multiplier toute la séquence correspondante par -1
+        for(m = 0; m < longueur; m++){
+          // fprintf(stderr, "ici, j : %d, tableau struct lignehadamard : %d\n", j, hadamarddd.ligneHadamard[m]);
+          hadamarddd.sequence[m] = hadamarddd.ligneHadamard[m] *= -1;
+          // fprintf(stderr, "\n\nici, j : %d, tableau struct lignehadamard : %d\n", j, hadamarddd.ligneHadamard[m]);
         }
+      }
+      else{
+        for(m = 0; m < longueur; m++){
+          hadamarddd.sequence[m] = hadamarddd.ligneHadamard[m];
+          // fprintf(stderr, "ici, j : %d, tableau struct sequence : %d\n", j, hadamarddd.sequence[m]);
+        }
+      }
     }
-    return mat;
-}
 
-void inverserMatrice(int **mat, int taille){
-    int i, j;
-    for(i = 0; i < taille; i++)
-        for(j = 0; j < taille; j++)
-            mat[i][j] *= -1;
+    for(n = 0; n < longueur * TAILLE_SEQ; n++){
+      fprintf(stderr, "sequence dans la structure : %d\n", hadamarddd.sequence[n]);
+      sequenceFinale[n] += hadamarddd.sequence[n];
+      fprintf(stderr, "sequenceFinale : %d\n", sequenceFinale[n]);
+      printf("Séquence finale après étalement : %d", sequenceFinale[n]);
+    }
+    fprintf(stderr,"\n");
+  }
+
 }
 
 /*   /!\ Penser à free la matrice en entier /!\   */
@@ -62,7 +98,7 @@ int **hadamard(int nbUser){
     Hprec = hadamard(nbUser/2);
 
     int i, j, x, y;
-    printf("avant recopie \n");
+    /*printf("avant recopie \n");*/
 
     //Recopie en haut à gauche
     for(i = 0, x = 0; i < nbUser/2; i++, x++){
@@ -84,7 +120,7 @@ int **hadamard(int nbUser){
             H[i][j] = Hprec[x][y];
         }
     }
-   
+
     //Recopie en bas à droite
     for(i = nbUser/2, x = 0; i < nbUser; i++, x++){
         for(j = nbUser/2, y = 0; j < nbUser; j++, y++){
@@ -97,22 +133,23 @@ int **hadamard(int nbUser){
     return H;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 
     int longueur = 4;
     int **mat = hadamard(longueur);
-    //affich_hadamard(mat, longueur);
+    etalement(longueur, mat);
 
     //codage du message
     // int tailleClair = atoi(argv[2]);
     // int messageACoder[tailleClair];
     // int tailleMessage =  tailleClair * longueur;
     // int messageCoder[tailleMessage];
-    // coderH(messageACoder, messageCoder, matriceH, ligne, tailleMessage, longueur, tailleClair);
-
-    // //decodage du message
+    // int ligne = 1;//Ligne de la matrice hadamard
+    // coderH(messageACoder, messageCoder, mat, ligne, tailleMessage, longueur, tailleClair);
+    //
+    // // //decodage du message
     // tailleClair = tailleMessage / longueur;//taille du message a coder
     // int messageClair[tailleClair];
-    // decoderH(messageCode, messageClair, matriceH, ligne, tailleMessage, longueur, tailleClair);
+    // decoderH(messageCoder, messageClair, mat, ligne, tailleMessage, longueur, tailleClair);
     return 0;
 }
