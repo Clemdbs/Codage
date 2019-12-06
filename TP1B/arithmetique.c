@@ -54,4 +54,5 @@ for(i = 0; ca != '\0', i++){
     dif = code[0] - code[1];
     code[0] = code[1] + ( dif * alpha[position - 1]);
     codeCourant[1] = code[1] + ( dif * alpha[position]);
+    printf("borne inf : %lf\t borne sup : %lf", code[0], code[1]);
 }
