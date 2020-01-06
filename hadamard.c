@@ -31,7 +31,7 @@ void etalement(int longueur, int **matrice){
   int sequenceFinale[longueur * TAILLE_SEQ];
 
   int i,j,k,l,m,n;
-
+  int o;
   hadamarddd.sequence3Bits = malloc(sizeof(int));
   hadamarddd.ligneHadamard = malloc(sizeof(int));
   hadamarddd.sequence = malloc(sizeof(int));
@@ -40,18 +40,18 @@ void etalement(int longueur, int **matrice){
   for(i = 0; i < longueur * TAILLE_SEQ; i++)
     sequenceFinale[i] = 0;
 
-  for(i = 1; i <= longueur; i++){
+  for(i = 0; i < longueur; i++){
     printf("Ligne de la matrice pour l'utilisateur %d : ",i);
     for(j = 0; j < longueur; j++){
-      printf("%d", matrice[i][j]);
-      hadamarddd.ligneHadamard[j] = matrice[i][j];//Erreur ici
+      printf("%d\n", matrice[i][j]);
+      hadamarddd.ligneHadamard[j] = matrice[i][j];
     }
 
     printf("Séquence de 3 bits aléatoires : ");
 
     for(k = 0; k < TAILLE_SEQ; k++){
       sequence3Bits[k] = rand() & 1;
-      printf("%d", sequence3Bits[k]);
+      printf("%d\n", sequence3Bits[k]);
       hadamarddd.sequence3Bits[k] = sequence3Bits[k];
       // fprintf(stderr, "ici, j : %d, tableau struct sequence3bits : %d\n", j, hadamarddd.sequence3Bits[k]);
     }
@@ -76,13 +76,16 @@ void etalement(int longueur, int **matrice){
     }
 
     for(n = 0; n < longueur * TAILLE_SEQ; n++){
-      fprintf(stderr, "sequence dans la structure : %d\n", hadamarddd.sequence[n]);
       sequenceFinale[n] += hadamarddd.sequence[n];
-      fprintf(stderr, "sequenceFinale : %d\n", sequenceFinale[n]);
-      printf("Séquence finale après étalement : %d", sequenceFinale[n]);
+      //Débugage
+      //fprintf(stderr, "sequenceFinale : %d\n", sequenceFinale[n]);
+      //printf("Séquence finale après étalement : %d\n", sequenceFinale[n]);
     }
     fprintf(stderr,"\n");
   }
+  //Débugage
+  // for(o = 0; o < longueur * TAILLE_SEQ; o++)
+  //   fprintf(stderr, "sequenceFinale FIN: %d\n", sequenceFinale[o]);
 
 }
 
