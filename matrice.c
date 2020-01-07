@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "matrice.h"
 
+//Fonction d'affichage d'une matrice
 void affich_hadamard(int **mat, int longueur){
     int i, j;
     for(i = 0; i < longueur; i++){
@@ -13,6 +14,7 @@ void affich_hadamard(int **mat, int longueur){
     }
 }
 
+//Fonction d'initialisation de la matrice
 int **initMatrice(int taille){
     int **mat = malloc(sizeof(int *) * taille);
     int i, j;
@@ -33,6 +35,7 @@ int **initMatrice(int taille){
     return mat;
 }
 
+//Fonction qui inverse la valeur des cases de la matrice passée en paramètre
 void inverserMatrice(int **mat, int taille){
     int i, j;
     for(i = 0; i < taille; i++)
