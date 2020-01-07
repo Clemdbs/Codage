@@ -6,7 +6,7 @@
 
 //messageACoder => le message que l'on va codé (tableau)
 //messageCoder => le message une fois codé (tableau)
-//matriceH => la matrice d'hadamard qui a été utilisé pour le codage du message
+//matriceH => la matrice d'hadamard qui sera utilisé pour le codage du message
 //ligne => ligne de la matrice d'hadamard
 //tailleMessage => taille du message codé
 //longueur => taille d'une ligne de la matrice d'hadamard utilisé
