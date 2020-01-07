@@ -1,4 +1,4 @@
-//Ecriture de l’ensemble des fonctions composants la mise en oeuvre du codage deHadamard. Ajout de la technique des séquences d’étalement.
+//Ecriture de l’ensemble des fonctions composants la mise en oeuvre du codage d'Hadamard. Ajout de la technique des séquences d’étalement.
 //matrice hadamard : x^n-1 | x^n-1
 //                   x^n-1 |-x^n-1
 //x[0]=1
@@ -12,15 +12,13 @@
 
 #define TAILLE_SEQ 3
 
-//SEGfault sur la 4eme boucle
-
 typedef struct etalement_s{
   int* sequence3Bits;//Tableau qui stocke la séquence aléatoire des bits pour le calcul de la séquence
   int* ligneHadamard;//Tableau qui stocke la ligne qui correspond à l'utilisateur
   int* sequence;//Tableau qui stocke la séquence après les calculs
 }etalement_t;
 
-/*Retourne un tableau de binaire*/
+/*Fonction qui fait utiliser pour x utilisateur une séquence de la matrice et émettre une séquence de 3 bits "aléatoires"*/
 void etalement(int longueur, int **matrice){
 
   srand (time (NULL));
@@ -31,7 +29,9 @@ void etalement(int longueur, int **matrice){
   int sequenceFinale[longueur * TAILLE_SEQ];
 
   int i,j,k,l,m,n;
-  int o;
+
+  int o; //Pour le débugage
+
   hadamarddd.sequence3Bits = malloc(sizeof(int));
   hadamarddd.ligneHadamard = malloc(sizeof(int));
   hadamarddd.sequence = malloc(sizeof(int));
@@ -40,8 +40,10 @@ void etalement(int longueur, int **matrice){
   for(i = 0; i < longueur * TAILLE_SEQ; i++)
     sequenceFinale[i] = 0;
 
+  //Boucle principale par rapport aux nombres d'utilisateurs 
   for(i = 0; i < longueur; i++){
     printf("Ligne de la matrice pour l'utilisateur %d : ",i);
+    //Recopie de la séquence dans le tableau prévu
     for(j = 0; j < longueur; j++){
       printf("%d\n", matrice[i][j]);
       hadamarddd.ligneHadamard[j] = matrice[i][j];
@@ -53,7 +55,7 @@ void etalement(int longueur, int **matrice){
       sequence3Bits[k] = rand() & 1;
       printf("%d\n", sequence3Bits[k]);
       hadamarddd.sequence3Bits[k] = sequence3Bits[k];
-      // fprintf(stderr, "ici, j : %d, tableau struct sequence3bits : %d\n", j, hadamarddd.sequence3Bits[k]);
+      // fprintf(stderr, "ici, k : %d, tableau struct sequence3bits : %d\n", k, hadamarddd.sequence3Bits[k]);
     }
 
     //Pour chaque bit de la séquence 3 bits faire
@@ -68,6 +70,7 @@ void etalement(int longueur, int **matrice){
         }
       }
       else{
+        //Sinon on le recopie juste
         for(m = 0; m < longueur; m++){
           hadamarddd.sequence[m] = hadamarddd.ligneHadamard[m];
           // fprintf(stderr, "ici, j : %d, tableau struct sequence : %d\n", j, hadamarddd.sequence[m]);
@@ -75,6 +78,8 @@ void etalement(int longueur, int **matrice){
       }
     }
 
+    //Addition de toute les séquences après l'émission du code de 3 bits aléatoire pour obtenir 
+    //la séquence finale
     for(n = 0; n < longueur * TAILLE_SEQ; n++){
       sequenceFinale[n] += hadamarddd.sequence[n];
       //Débugage
@@ -84,8 +89,8 @@ void etalement(int longueur, int **matrice){
     fprintf(stderr,"\n");
   }
   //Débugage
-  // for(o = 0; o < longueur * TAILLE_SEQ; o++)
-  //   fprintf(stderr, "sequenceFinale FIN: %d\n", sequenceFinale[o]);
+   for(o = 0; o < longueur * TAILLE_SEQ; o++)
+     fprintf(stderr, "sequenceFinale FIN: %d\n", sequenceFinale[o]);
 
 }
 
@@ -93,6 +98,7 @@ void etalement(int longueur, int **matrice){
 int **hadamard(int nbUser){
     int **H = initMatrice(nbUser);//Matrice d'hadamard
 
+    //Matrice minimale
     if(nbUser == 1){
         H[0][0] = 1;
         return H;
@@ -143,16 +149,16 @@ int main(int argc, char* argv[]) {
     etalement(longueur, mat);
 
     //codage du message
-    // int tailleClair = atoi(argv[2]);
-    // int messageACoder[tailleClair];
-    // int tailleMessage =  tailleClair * longueur;
-    // int messageCoder[tailleMessage];
-    // int ligne = 1;//Ligne de la matrice hadamard
-    // coderH(messageACoder, messageCoder, mat, ligne, tailleMessage, longueur, tailleClair);
-    //
-    // // //decodage du message
-    // tailleClair = tailleMessage / longueur;//taille du message a coder
-    // int messageClair[tailleClair];
-    // decoderH(messageCoder, messageClair, mat, ligne, tailleMessage, longueur, tailleClair);
+    int tailleClair = atoi(argv[2]);
+    int messageACoder[tailleClair];
+    int tailleMessage =  tailleClair * longueur;
+    int messageCoder[tailleMessage];
+    int ligne = 1;//Ligne de la matrice hadamard
+    coderH(messageACoder, messageCoder, mat, ligne, tailleMessage, longueur, tailleClair);
+    
+    //decodage du message
+    tailleClair = tailleMessage / longueur;//taille du message a coder
+    int messageClair[tailleClair];
+    decoderH(messageCoder, messageClair, mat, ligne, tailleMessage, longueur, tailleClair);
     return 0;
 }
