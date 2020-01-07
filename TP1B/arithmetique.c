@@ -50,18 +50,29 @@ int main(){
         inter[k] += inter[k+1];
     }
 
-
+    // recopie des bornes dans le tableau des lettres
+    for(j = 0, k = 0; k < 27; k++)
+    {
+        if(alpha[j] != 0)
+        {
+            alpha[k] = inter[j];
+            j++;//devient le nombre de caracteres different utilisé
+        }
+    }
 
     // intervalle de codage final
     float code[2] = {0, 0};
     int dif; // ecart entre les deux bornes de l'intervalle
+    int prec, indice;
     // codage
     for(i = 0; ca != '\0'; i++)
     {
         ci = atoi(&message[i]);
         position = ci - 'A';
         dif = code[0] - code[1];
-        code[0] = code[1] + ( dif * alpha[position - 1]);
+        indice = position;
+        for(prec = 0; alpha[indice] == 0; prec++, indice--); // permet de trouver la borne inferieur
+        code[0] = code[1] + ( dif * alpha[position - prec]);
         code[1] = code[1] + ( dif * alpha[position]);
         printf("borne inf : %f\t borne sup : %f", code[0], code[1]);
     }
